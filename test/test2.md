@@ -1,5 +1,5 @@
 # Hello, World!
-This is `love-notes` weaver test
+This is `love-notes` weaver test. The file is generated from [test2.md](https://github.com/8-uh/love-notes/blob/master/test/test2.md)
 
 ## HTML Weaving
 First, I'm gonna try dropping in a single html tag... I'm gonna use a simple `h3`:
@@ -99,7 +99,7 @@ I plan on drawing a bunch of random circles every frame, and I want my circles t
 
 Ok, almost there... now we just have to `draw` something. I want to draw between 25 and 50 circles per tick. I want all of the circles for a particular tick to have the same color and radii. However, I want each tick to produce different sized circles from the frame before it. The circles should also appear to "drip" from the top of the frame. I also want the color of the circles to cycle. I'll use a color organ that cycles as a function of `sin(frameCount)`.
 
-```js <3
+```js
   function draw() {
     // ctx.clearRect(0, 0, width, height)
 
