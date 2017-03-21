@@ -6,9 +6,9 @@ A literate programming tangler for javascript embedded into markdown
 
 In the particular instance of `love-notes`, the source for a program is built by creating a markdown file that contains prose (the documentation) and codefences (the code) and is **tangled** into source files.
 
-Having a hard time picturing it? How about a simple example? Take a look at [/test/test.md](this markdown file)
+Having a hard time picturing it? How about a simple example? Take a look at [this markdown file](/test/test.md)
 
-Running that file through the tangler will produce both: [examples/tangler-output/index.js](index.js) and [examples/tangler-output/math.js](math.js)
+Running that file through the tangler will produce both: [index.js](examples/tangler-output/index.js) and [math.js](examples/tangler-output/math.js)
 
 ## Why?
 One of the biggest issues we, as a community of developers, face, is the fact that our documentation doesn't generally reflect the state of mind or decision making process that we, as indivduals, went through when attempting to solve a problem. Worse than that, when we go back to document, or modify the code, we rarely remember *why* we made the decisions in the first place. Providing a few readable sentences providing an insight as to why a specific design choice was made (or as I've found to be much more insightful in communicating with other developers, why *other decisions* were *not* made) is incredibly helpful when attempting to re-enter the mindset you (or others) were in when developing said solution.
