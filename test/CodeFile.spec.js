@@ -13,7 +13,7 @@ test('CodeFile throws if no filename given at instantiation', t => {
 
 test('CodeFile#constructor', t => {
   const cf = new CodeFile('index.js')
-  t.is(cf.filename, 'index.js')
+  t.is(cf.name, 'index.js')
   t.is(cf.codesections.length, 1)
   t.is(cf.codesections[0].name, 'default')
 })

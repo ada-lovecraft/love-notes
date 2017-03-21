@@ -5,14 +5,17 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run develop",
+    "build": "babel src -d lib",
+    "example": "DEBUG=*:log,*:error node example/index.js",
     "develop": "DEBUG=*:log,*:error nodemon src/index.js",
     "test": "ava -t ./test/*.spec.js | tnyan",
-    "test:watch": "ava -w ./test/*.spec.js"
+    "test:watch": "DEBUG=*.spec:log ava -w ./test/*.spec.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "ava": "^0.18.2",
+    "babel-cli": "^6.24.0",
     "babel-core": "^6.23.1",
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.2.1",

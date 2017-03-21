@@ -11,14 +11,13 @@ module.exports = {
   mocks: {
     test: function() {
       const ast = remark().parse(contents)
-      const mock = []
-      let c = 0
-      visit(ast, 'code', node => {
-        node.data = {}
-        mock.push(node)
-      })
-      return mock
+      const mocks = []
 
+      visit(ast, 'code', node => {
+        node.data = node.data || {}
+        mocks.push(node)
+      })
+      return mocks
     }
   }
 }

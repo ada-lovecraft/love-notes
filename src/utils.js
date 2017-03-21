@@ -13,7 +13,27 @@ function unless(exp, cb) {
   }
 }
 
+function truncValues(obj, demark = '\n', length = 80) {
+  let o = {}
+
+  for(let [key, value] of Object.entries(obj)) {
+    if(typeof value === 'string') {
+        const splits = value.split(demark)
+        if(splits.length > 1) {
+          value = splits[0] + '...' + splits[splits.length - 1]
+        }
+
+      if(value.length > length - 3) {
+        value = value.substr(0, length - 3) + '...'
+      }
+    }
+    o[key] = value
+  }
+  return o
+}
+
 module.exports = {
   createSearch: createSearch,
-  unless: unless
+  unless: unless,
+  truncValues: truncValues
 }

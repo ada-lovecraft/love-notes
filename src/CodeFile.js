@@ -1,5 +1,5 @@
 const debug = require('debug')
-const {unless} = require('./utils')
+const {unless, truncValues} = require('./utils')
 const CodeSection = require('./CodeSection')
 
 const log = debug('CodeFile:log')
@@ -15,9 +15,9 @@ class Node {
 class CodeFile {
   constructor(filename) {
     unless(filename, () => {throw new SyntaxError('CodeFile must be instantiated with a filename')})
-    this.filename = filename
+    log('creating new CodeFile:', filename)
+    this.name = filename
     this.codesections = []
-    this._source = null
     this.addCodeSection('default')
     this.root = this.findCodeSectionByName('default')
 
@@ -30,7 +30,6 @@ class CodeFile {
   addCodeSection(sectionName) {
     const section = new CodeSection(sectionName)
     this.codesections.push(section)
-    this.sectionID++
     return section
   }
 
@@ -40,7 +39,8 @@ class CodeFile {
 
 
   addBlockToCodeSection(block) {
-    let section = this.findCodeSectionByName(block.data.section)
+    var section = this.findCodeSectionByName(block.data.section)
+    log
     unless(section, () => { section = this.addCodeSection(block.data.section)})
     section.addBlock(block)
   }

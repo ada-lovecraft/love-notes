@@ -1,7 +1,7 @@
 const debug = require('debug')
 const CodeFile = require('./CodeFile')
 const {unless} = require('./utils')
-
+const fmt = require('fmt-obj')
 const log = debug('CodeStore:log')
 
 
@@ -13,28 +13,28 @@ class CodeStore {
   }
 
   get filenames() {
-    return this.codefiles.map(file => filename)
+    return this.codefiles.map(file => file.name)
   }
   addCodeFile(filename = 'index.js') {
-    const file = new CodeFile(filename)
-    if(this.findCodeFileByName(filename)) {
-      throw new ReferenceError(`CodeStore already contails a file named ${filename}`)
+    var file = this.findCodeFileByName(filename)
+    if(file) {
+      throw new ReferenceError(`CodeFile ${filename} already exists`)
     }
+    file = new CodeFile(filename)
     this.codefiles.push(file)
     return file
   }
 
   findCodeFileByName(filename) {
-    return this.codefiles.find(f => f.filename == filename)
+    return this.codefiles.find(f => f.name == filename)
   }
 
   modifyNodeData(node) {
-    const data = node.data || {}
+    const data = node.data
     const lang = node.lang
     const {filename, section} = this.parseLang(lang)
     data.filename = filename
     data.section = section
-
     // find sections identified in this block
     const childSectionNames = this.listChildSectionNamesForNode(node)
     // append the childnames to the node's data
@@ -47,9 +47,11 @@ class CodeStore {
 
   addNode(node) {
     node = this.modifyNodeData(node)
-    const {filename, section, childSections} = node.data
-    let file = this.findCodeFileByName(filename)
+
+    var {filename, section, childSections} = node.data
+    var file = this.findCodeFileByName(filename)
     unless(file, () => { file = this.addCodeFile(filename)})
+    log('adding node to file:', filename, file.name)
 
     const [default_, ...sectionNames] = file.sectionNames
 
@@ -58,6 +60,8 @@ class CodeStore {
       .filter(section => !sectionNames.includes(section))
     filtered.forEach(newSection => file.addCodeSection(newSection))
     file.addBlockToCodeSection(node, section)
+    log('added node to file:', file.name)
+    log('filenames:', this.filenames)
   }
 
   listChildSectionNamesForNode(node) {
