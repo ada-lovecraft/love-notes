@@ -8,7 +8,7 @@
     "start": "npm run watch",
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "example": "node example/index.js",
+    "examples:tangler": "node examples/tangler.js",
     "test": "ava -t ./test/*.spec.js",
     "test:watch": "DEBUG=*.spec:log ava -w ./test/*.spec.js",
     "prepublish": "npm test"

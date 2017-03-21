@@ -18,8 +18,8 @@ class CodeFile {
     log('creating new CodeFile:', filename)
     this.name = filename
     this.codesections = []
-    this.addCodeSection('default')
-    this.root = this.findCodeSectionByName('default')
+    this.addCodeSection('root')
+    this.root = this.findCodeSectionByName('root')
 
   }
 
@@ -45,7 +45,7 @@ class CodeFile {
     section.addBlock(block)
   }
 
-  buildDependencyTree(sectionName = 'default') {
+  buildDependencyTree(sectionName = 'root') {
     const section = this.findCodeSectionByName(sectionName)
     const tree = new Node(section.name, section.source)
     if(section.children) {

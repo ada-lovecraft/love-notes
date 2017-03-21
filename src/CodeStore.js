@@ -95,7 +95,7 @@ class CodeStore {
 
   parseLang(lang) {
 
-    let ret = {filename: 'index.js', section: 'default'}
+    let ret = {filename: 'index.js', section: 'root'}
     if(!lang) {
       return ret
     }
@@ -117,7 +117,7 @@ class CodeStore {
       ret.filename = exc[1]
       ret.section = exc[2]
       if(ret.section === '#default') {
-        ret.section = 'default'
+        ret.section = 'root'
       }
       return ret
     }

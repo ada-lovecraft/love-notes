@@ -27,7 +27,7 @@ Math function stub body
 return a + b
 ```
 
-executor
+exectu
 ```js > math.js
 console.log(sum(2, 2))
 ```

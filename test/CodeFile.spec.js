@@ -15,7 +15,7 @@ test('CodeFile#constructor', t => {
   const cf = new CodeFile('index.js')
   t.is(cf.name, 'index.js')
   t.is(cf.codesections.length, 1)
-  t.is(cf.codesections[0].name, 'default')
+  t.is(cf.codesections[0].name, 'root')
 })
 
 test('CodeFile#addCodeSection', t => {
@@ -29,9 +29,9 @@ test('CodeFile#addCodeSection', t => {
 
 test('CodeFile#findCodeSectionByName', t => {
   const cf = new CodeFile('index.js')
-  var section = cf.findCodeSectionByName('default')
+  var section = cf.findCodeSectionByName('root')
   t.truthy(section)
-  t.is(section.name, 'default')
+  t.is(section.name, 'root')
   t.falsy(cf.findCodeSectionByName('#greet'))
 })
 
@@ -39,7 +39,7 @@ test('CodeFile#addBlockContentsToCodeSection', t => {
   const cf = new CodeFile('index.js')
   const blocks = mocks.test()
   blocks[0].data ={
-    section: 'default',
+    section: 'root',
     filename: 'index.js'
   }
   t.notThrows(() => {cf.addBlockToCodeSection(blocks[0])})
@@ -50,7 +50,7 @@ test('CodeFile#addBlockContentsToCodeSection', t => {
   cf.addCodeSection('#greet')
   t.notThrows(() => {cf.addBlockToCodeSection(blocks[1])})
 
-  var s = cf.findCodeSectionByName('default')
-  t.is(s.name, 'default')
+  var s = cf.findCodeSectionByName('root')
+  t.is(s.name, 'root')
   t.is(s.blocks.length, 1)
 })

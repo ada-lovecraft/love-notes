@@ -9,7 +9,7 @@ const {mocks} = utils
 var section
 
 test.beforeEach( t => {
-  section = new CodeSection('default', 0)
+  section = new CodeSection('root', 0)
 })
 
 test('CodeSection#constructor istantiates or throws correctly', t => {

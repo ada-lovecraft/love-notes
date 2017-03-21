@@ -61,15 +61,15 @@ test('CodeStore#findCodeFileByName', t => {
 test('CodeStore#parseLang', t => {
   var {filename, section} = store.parseLang()
   t.is(filename, 'index.js')
-  t.is(section, 'default')
+  t.is(section, 'root')
 
   var {filename, section} = store.parseLang('js > index.js')
   t.is(filename, 'index.js')
-  t.is(section, 'default')
+  t.is(section, 'root')
 
   var {filename, section} = store.parseLang('js > index.js#default')
   t.is(filename, 'index.js')
-  t.is(section, 'default')
+  t.is(section, 'root')
 
   var {filename, section} = store.parseLang('js > #greet')
   t.is(filename, 'index.js')
@@ -81,7 +81,7 @@ test('CodeStore#parseLang', t => {
 
   var {filename, section} = store.parseLang(' > math.js')
   t.is(filename, 'math.js')
-  t.is(section, 'default')
+  t.is(section, 'root')
 
   var {filename, section} = store.parseLang(' > math.js#sum-body')
   t.is(filename, 'math.js')
@@ -92,7 +92,7 @@ test('CodeStore#modifyNodeData', t => {
   const nodes = mocks.test()
   var {data} = store.modifyNodeData(nodes[0])
   t.is(data.filename, 'index.js')
-  t.is(data.section, 'default')
+  t.is(data.section, 'root')
   t.is(data.childSections[0], '#greet')
 
   var {data} = store.modifyNodeData(nodes[1])
@@ -101,7 +101,7 @@ test('CodeStore#modifyNodeData', t => {
 
   var {data} = store.modifyNodeData(nodes[2])
   t.is(data.filename, 'math.js')
-  t.is(data.section, 'default')
+  t.is(data.section, 'root')
 
   var {data} = store.modifyNodeData(nodes[3])
   t.is(data.filename, 'math.js')
@@ -109,7 +109,7 @@ test('CodeStore#modifyNodeData', t => {
 
   var {data} = store.modifyNodeData(nodes[4])
   t.is(data.filename, 'math.js')
-  t.is(data.section, 'default')
+  t.is(data.section, 'root')
 })
 
 test('CodeStore#addNode', t => {
@@ -119,7 +119,7 @@ test('CodeStore#addNode', t => {
   store.addNode(nodes[1])
   const file = store.findCodeFileByName('index.js')
   t.is(file.codesections.length, 2)
-  const section = store.codefiles[0].findCodeSectionByName('default')
+  const section = store.codefiles[0].findCodeSectionByName('root')
   const s2 = store.codefiles[0].findCodeSectionByName('#greet')
   t.is(section.children.length, 1)
 })
