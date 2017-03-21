@@ -37,7 +37,7 @@ export default {
     {
       dest: pkg['jsnext:main'],
       format: 'es',
-      soourceMap: true
+      sourceMap: true
     }
   ]
 
