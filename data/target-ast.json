@@ -1,0 +1,138 @@
+{
+  "type": "root",
+  "children": [
+    {
+      "type": "heading",
+      "depth": 1,
+      "children": [
+        {
+          "type": "text",
+          "value": "Hello, World!",
+          "position": {
+            "start": {
+              "line": 1,
+              "column": 3,
+              "offset": 2
+            },
+            "end": {
+              "line": 1,
+              "column": 16,
+              "offset": 15
+            },
+            "indent": []
+          }
+        }
+      ],
+      "position": {
+        "start": {
+          "line": 1,
+          "column": 1,
+          "offset": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 16,
+          "offset": 15
+        },
+        "indent": []
+      }
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "value": "// this is a code block\nconsole.log('hello, code blocks!')",
+      "position": {
+        "start": {
+          "line": 3,
+          "column": 1,
+          "offset": 17
+        },
+        "end": {
+          "line": 6,
+          "column": 4,
+          "offset": 85
+        },
+        "indent": [
+          1,
+          1,
+          1
+        ]
+      },
+      "data": {
+        "filename": "index.js",
+        "section": "default"
+      }
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "value": "this is more regular text",
+          "position": {
+            "start": {
+              "line": 8,
+              "column": 1,
+              "offset": 87
+            },
+            "end": {
+              "line": 8,
+              "column": 26,
+              "offset": 112
+            },
+            "indent": []
+          }
+        }
+      ],
+      "position": {
+        "start": {
+          "line": 8,
+          "column": 1,
+          "offset": 87
+        },
+        "end": {
+          "line": 8,
+          "column": 26,
+          "offset": 112
+        },
+        "indent": []
+      }
+    },
+    {
+      "type": "code",
+      "lang": null,
+      "value": "console.log('oh look, another code block!')\nconsole.log('foo bar or not foo bar... is that a question?')",
+      "position": {
+        "start": {
+          "line": 10,
+          "column": 1,
+          "offset": 114
+        },
+        "end": {
+          "line": 11,
+          "column": 65,
+          "offset": 226
+        },
+        "indent": [
+          1
+        ]
+      },
+      "data": {
+        "filename": "index.js",
+        "section": "default"
+      }
+    }
+  ],
+  "position": {
+    "start": {
+      "line": 1,
+      "column": 1,
+      "offset": 0
+    },
+    "end": {
+      "line": 12,
+      "column": 1,
+      "offset": 227
+    }
+  }
+}
