@@ -37,11 +37,16 @@ test('CodeFile#findCodeSectionByName', t => {
 
 test('CodeFile#addBlockContentsToCodeSection', t => {
   const cf = new CodeFile('index.js')
-  const blocks = mocks.defaultIndex()
-
+  const blocks = mocks.test()
+  blocks[0].data ={
+    section: 'default',
+    filename: 'index.js'
+  }
   t.notThrows(() => {cf.addBlockToCodeSection(blocks[0])})
-  t.throws(() => {cf.addBlockToCodeSection(blocks[1])}, ReferenceError)
-
+  blocks[1].data ={
+    section: '#greet',
+    filename: 'index.js'
+  }
   cf.addCodeSection('#greet')
   t.notThrows(() => {cf.addBlockToCodeSection(blocks[1])})
 

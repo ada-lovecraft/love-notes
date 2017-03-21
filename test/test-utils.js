@@ -10,7 +10,15 @@ const contents = fs.read('./test/test.md')
 module.exports = {
   mocks: {
     test: function() {
-      return remark().parse(contents)
+      const ast = remark().parse(contents)
+      const mock = []
+      let c = 0
+      visit(ast, 'code', node => {
+        node.data = {}
+        mock.push(node)
+      })
+      return mock
+
     }
   }
 }

@@ -40,8 +40,8 @@ class CodeFile {
 
 
   addBlockToCodeSection(block) {
-    const section = this.findCodeSectionByName(block.data.section)
-    unless(section, () => { throw new ReferenceError(`No CodeSection \`${sectionName}\` for CodeFile \`${this.filename}\``)})
+    let section = this.findCodeSectionByName(block.data.section)
+    unless(section, () => { section = this.addCodeSection(block.data.section)})
     section.addBlock(block)
   }
 

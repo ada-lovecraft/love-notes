@@ -29,7 +29,7 @@ class CodeStore {
   }
 
   modifyNodeData(node) {
-    const data = node.data
+    const data = node.data || {}
     const lang = node.lang
     const {filename, section} = this.parseLang(lang)
     data.filename = filename
@@ -54,21 +54,10 @@ class CodeStore {
     const [default_, ...sectionNames] = file.sectionNames
 
     // create any new sections on this file that this node contain
-    childSections
+    var filtered = childSections
       .filter(section => !sectionNames.includes(section))
-      .forEach(newSection => file.addCodeSection(newSection))
-
-
-    try {
-      file.addBlockToCodeSection(node, data.section)
-    } catch(err) {
-      if(err instanceof ReferenceError) {
-        file.addCodeSection(section)
-        file.addBlockToCodeSection(node, section)
-      } else {
-        throw err
-      }
-    }
+    filtered.forEach(newSection => file.addCodeSection(newSection))
+    file.addBlockToCodeSection(node, section)
   }
 
   listChildSectionNamesForNode(node) {
