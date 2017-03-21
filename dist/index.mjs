@@ -1,8 +1,12 @@
 import remark from 'remark';
+import html from 'remark-html';
 import visit from 'unist-util-visit';
+import unistUtilParents from 'unist-util-parents';
+import u from 'unist-builder';
 import jetpack from 'fs-jetpack';
 import debug from 'debug';
 import fmtObj from 'fmt-obj';
+import vfileReporter from 'vfile-reporter';
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -144,8 +148,8 @@ var CodeFile = function () {
     log$2('creating new CodeFile:', filename);
     this.name = filename;
     this.codesections = [];
-    this.addCodeSection('default');
-    this.root = this.findCodeSectionByName('default');
+    this.addCodeSection('root');
+    this.root = this.findCodeSectionByName('root');
   }
 
   createClass(CodeFile, [{
@@ -179,7 +183,7 @@ var CodeFile = function () {
     value: function buildDependencyTree() {
       var _this2 = this;
 
-      var sectionName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+      var sectionName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'root';
 
       var section = this.findCodeSectionByName(sectionName);
       var tree = new Node(section.name, section.source);
@@ -236,9 +240,9 @@ var CodeStore = function () {
       var data = node.data;
       var lang = node.lang;
 
-      var _parseLang = this.parseLang(lang),
-          filename = _parseLang.filename,
-          section = _parseLang.section;
+      var _ref = !!data.filename ? data : this.parseLang(lang),
+          filename = _ref.filename,
+          section = _ref.section;
 
       data.filename = filename;
       data.section = section;
@@ -322,7 +326,7 @@ var CodeStore = function () {
     key: 'parseLang',
     value: function parseLang(lang) {
 
-      var ret = { filename: 'index.js', section: 'default' };
+      var ret = { filename: 'index.js', section: 'root' };
       if (!lang) {
         return ret;
       }
@@ -344,7 +348,7 @@ var CodeStore = function () {
         ret.filename = exc[1];
         ret.section = exc[2];
         if (ret.section === '#default') {
-          ret.section = 'default';
+          ret.section = 'root';
         }
         return ret;
       }
@@ -377,21 +381,29 @@ var fs = jetpack;
 var log = debug('love-notes:log');
 var err$1 = debug('love-notes:err');
 
-function tangle(fptr) {
-  var outdir = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : './docs';
-
+function process(fptr) {
   log('fptr:', fptr);
-  log('outdir:', outdir);
+
   var contents = fs.read(fptr);
   var store = new CodeStore();
   var ast = remark().parse(contents);
 
   visit(ast, 'code', function (node) {
     node.data = node.data || {};
-    store.addNode(node);
+    if (none(node.data.process) || !!node.data.process) {
+      store.addNode(node);
+    }
   });
+  log('virtual files created:', store.codefiles.length);
+  return store;
+}
 
-  log('files created:', store.codefiles.length);
+function tangle(fptr) {
+  var outdir = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : './docs';
+
+  log('outdir:', outdir);
+  var store = process(fptr);
+
   var filenames = store.filenames;
   log('filenames: %O', filenames);
   var files = filenames.map(function (file) {
@@ -407,6 +419,49 @@ function tangle(fptr) {
   }));
 }
 
-var index = { tangle: tangle };
+function weave(fptr) {
+  var outdir = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : './docs';
+
+
+  var contents = fs.read(fptr);
+  var filename = /\/?(\S+)\.\S+$/.exec(fptr)[1] + '.html';
+  remark().use(weaver).use(html).process(contents, function (err, file) {
+    var pen = fs.cwd(outdir);
+    pen.write(filename, file.contents);
+    log('created file ' + pen.cwd() + '/' + filename);
+  });
+}
+
+function weaver() {
+
+  function transformer(ast, file) {
+    var insertions = [];
+
+    visit(ast, 'code', function (node, index, parent) {
+      var lang = node.lang;
+
+      var data = node.data || {};
+      var cmdstr = lang.split(' ');
+      if (cmdstr.length >= 2 && cmdstr[1] === '<3') {
+        node.lang = cmdstr[0];
+        data.process = false;
+        var htmlsrc = node.value;
+        if (node.lang === 'js') {
+          htmlsrc = '<script>\n' + node.value + '\n</script>';
+        }
+        var htmlNode = u('html', { value: htmlsrc });
+        insertions.push({ node: node, index: index, parent: parent, htmlNode: htmlNode });
+      }
+      node.data = data;
+    });
+    insertions.forEach(function (insert, idx) {
+      insert.parent.children.splice(insert.index + (idx + 1), 0, insert.htmlNode);
+    });
+  }
+
+  return transformer;
+}
+
+var index = { tangle: tangle, process: process, weave: weave };
 
 export default index;

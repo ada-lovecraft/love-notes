@@ -1,6 +1,6 @@
 # Hello, World!
 
-``` > index.js
+```js > index.js
 // this is a code block
 #greet
 

@@ -32,7 +32,7 @@ class CodeStore {
   modifyNodeData(node) {
     const data = node.data
     const lang = node.lang
-    const {filename, section} = this.parseLang(lang)
+    let {filename, section} = !!data.filename ? data : this.parseLang(lang)
     data.filename = filename
     data.section = section
     // find sections identified in this block

@@ -1,0 +1,251 @@
+<h1>Hello, World!</h1>
+<p>This is <code>love-notes</code> weaver test</p>
+<h2>HTML Weaving</h2>
+<p>First, I'm gonna try dropping in a single html tag... I'm gonna use a simple <code>h3</code>:</p>
+<pre><code class="language-html">&#x3C;h3>If this worked, you'll see this text in a heading immediately below&#x3C;/h3>
+</code></pre>
+<h3>If this worked, you'll see this text in a heading immediately below</h3>
+<h2>JavaScript Weaving</h2>
+<p>Now, I'm gonna try dropping in some simple javascript.</p>
+<pre><code class="language-js">console.log('Hello, Weaver!')
+</code></pre>
+<script>
+console.log('Hello, Weaver!')
+</script>
+<p>Open your console <kbd>cmd+alt+j</kbd> to see if it worked</p>
+<h2>Integrated Weaving</h2>
+<p>Finally, I'm gonna check to see if an inserted html node and a js snippet can interact with each other by making a simple canvas test</p>
+<p>The canvas animation is gonna take a few steps: Fist, I'm gonna setup some constants</p>
+<pre><code class="language-js">  // Math shorthands
+  const {sin, abs, random, PI, sign} = Math
+  const TWO_PI = PI * 2
+
+  // dimensions
+  const {width, height} = {width: window.innerWidth, height: 200}
+
+  // raf shorthand
+  const raf = window.requestAnimationFrame
+</code></pre>
+<script>
+  // Math shorthands
+  const {sin, abs, random, PI, sign} = Math
+  const TWO_PI = PI * 2
+
+  // dimensions
+  const {width, height} = {width: window.innerWidth, height: 200}
+
+  // raf shorthand
+  const raf = window.requestAnimationFrame
+</script>
+<p>Next, let's write a function that creates a canvas, inserts it into the DOM, and creates a drawing context</p>
+<pre><code class="language-js">  function createCanvas(w, h, selector) {
+    // grab the container
+    const container = document.querySelector(selector)
+
+    // create a canvas element
+    const canvas = document.createElement('canvas')
+
+    // set the canvas size
+    canvas.width = w
+    canvas.height = h
+
+    // append the canvas to the container
+    container.appendChild(canvas)
+
+    // create and return a drawing context
+    return canvas.getContext('2d')
+  }
+</code></pre>
+<script>
+  function createCanvas(w, h, selector) {
+    // grab the container
+    const container = document.querySelector(selector)
+
+    // create a canvas element
+    const canvas = document.createElement('canvas')
+
+    // set the canvas size
+    canvas.width = w
+    canvas.height = h
+
+    // append the canvas to the container
+    container.appendChild(canvas)
+
+    // create and return a drawing context
+    return canvas.getContext('2d')
+  }
+</script>
+<p>Now, I'm going to create a few quick shorthand functions for saving and restoring the canvas transformation matrix.</p>
+<pre><code class="language-js">  // short hands for transformation states
+  function push() {
+    ctx.save()
+  }
+  function pop() {
+    ctx.restore()
+  }
+</code></pre>
+<script>
+  // short hands for transformation states
+  function push() {
+    ctx.save()
+  }
+  function pop() {
+    ctx.restore()
+  }
+</script>
+<p>And a quick <code>randomInRange</code> function that will return an integer</p>
+<pre><code class="language-js">  const randomInRange = (start, end) => {
+    const range = end - start
+    return ~~(random() * range) + start
+  }
+</code></pre>
+<script>
+  const randomInRange = (start, end) => {
+    const range = end - start
+    return ~~(random() * range) + start
+  }
+</script>
+<p>And then I'll compose that function and create a <code>randomPointOnCanvas</code> function that will return a naive <code>point</code> object and create a shorthand alias for it: <code>poc</code> (<em>pointOnCanvas</em>)). I want the point to return any viable <code>x</code> but only <code>y</code> values upt to 1/4 the height of the canvas</p>
+<pre><code class="language-js">  const randomPointOnCanvas = () => {
+    return {x: randomInRange(0, width), y: randomInRange(0, - height * 0.25)}
+  }
+  const poc = randomPointOnCanvas
+</code></pre>
+<script>
+  const randomPointOnCanvas = () => {
+    return {x: randomInRange(0, width), y: randomInRange(0, - height * 0.25)}
+  }
+  const poc = randomPointOnCanvas
+</script>
+<p>I plan on drawing a bunch of random circles every frame, and I want my circles to be centered on the <code>point</code> they are drawn at... It's also faster to translate the canvas, than to translate the pen, so I'll use a combination of <code>push</code>, <code>pop</code>, <code>translate</code> and <code>arc</code> to draw them</p>
+<pre><code class="language-js">  function circle(center, radius = 10) {
+    push()
+    ctx.beginPath()
+    ctx.translate(center.x, center.y)
+    ctx.arc(0, 0, radius, 0, TWO_PI)
+    ctx.closePath()
+    ctx.fill()
+    ctx.stroke()
+    pop()
+  }
+</code></pre>
+<script>
+  function circle(center, radius = 10) {
+    push()
+    ctx.beginPath()
+    ctx.translate(center.x, center.y)
+    ctx.arc(0, 0, radius, 0, TWO_PI)
+    ctx.closePath()
+    ctx.fill()
+    ctx.stroke()
+    pop()
+  }
+</script>
+<p>Ok, almost there... now we just have to <code>draw</code> something. I want to draw between 25 and 50 circles per tick. I want all of the circles for a particular tick to have the same color and radii. However, I want each tick to produce different sized circles from the frame before it. The circles should also appear to "drip" from the top of the frame. I also want the color of the circles to cycle. I'll use a color organ that cycles as a function of <code>sin(frameCount)</code>.</p>
+<pre><code class="language-js">  function draw() {
+    // ctx.clearRect(0, 0, width, height)
+
+    const step = frameCount * 0.0075
+    // dripping effect
+    push()
+    ctx.scale(1.0, 1.05)
+    ctx.drawImage(ctx.canvas, 0, 0)
+    pop()
+
+    // random number of circles
+    const numCircles = randomInRange(5, 10)
+    const radius = randomInRange(10, 50)
+
+    // BITWISE DOUBLE NOT operator
+    const mod = ~~abs(sin(frameCount * 0.0075) * 255)
+    ctx.fillStyle = `rgb(${mod},${abs(128 - mod)},${255-mod})`
+    ctx.strokeStyle = sign(sin(step)) >= 1 ? 'white' : 'black'
+    push()
+    for(let i = 0; i &#x3C; numCircles; i++) {
+      circle(poc(), radius)
+    }
+
+    circle(poc(), radius)
+    pop()
+  }
+</code></pre>
+<script>
+  function draw() {
+    // ctx.clearRect(0, 0, width, height)
+
+    const step = frameCount * 0.0075
+    // dripping effect
+    push()
+    ctx.scale(1.0, 1.05)
+    ctx.drawImage(ctx.canvas, 0, 0)
+    pop()
+
+    // random number of circles
+    const numCircles = randomInRange(5, 10)
+    const radius = randomInRange(10, 50)
+
+    // BITWISE DOUBLE NOT operator
+    const mod = ~~abs(sin(frameCount * 0.0075) * 255)
+    ctx.fillStyle = `rgb(${mod},${abs(128 - mod)},${255-mod})`
+    ctx.strokeStyle = sign(sin(step)) >= 1 ? 'white' : 'black'
+    push()
+    for(let i = 0; i < numCircles; i++) {
+      circle(poc(), radius)
+    }
+
+    circle(poc(), radius)
+    pop()
+  }
+</script>
+<p>Because I'm using <code>frameCount</code>, I'm going to create a small function that updates the count and also updates a small node on the DOM to show the number</p>
+<pre><code class="language-js">function updateFrameCount() {
+  frameCount++
+  $frameCount.innerText = frameCount
+}
+</code></pre>
+<script>
+function updateFrameCount() {
+  frameCount++
+  $frameCount.innerText = frameCount
+}
+</script>
+<p>Last piece of functionality to code is to create an animation loop that calls the <code>draw()</code> method, waits for another animation frame, and does it all again. Simple enough.</p>
+<pre><code class="language-js">var frameCount = 0
+var $frameCount = null // dom element
+
+function loop() {
+  updateFrameCount()
+  draw()
+  raf(loop)
+}
+</code></pre>
+<script>
+var frameCount = 0
+var $frameCount = null // dom element
+
+function loop() {
+  updateFrameCount()
+  draw()
+  raf(loop)
+}
+</script>
+<p>And now... we drop in the canvas and <code>$frameCount</code> element...</p>
+<pre><code class="language-html">&#x3C;div id="canvas-container">&#x3C;/div>
+&#x3C;p>&#x3C;code>frameCount:&#x3C;/cod> &#x3C;span id="frame-counter">0&#x3C;/span>&#x3C;/p>
+</code></pre>
+<div id="canvas-container"></div>
+<p><code>frameCount:</cod> <span id="frame-counter">0</span></p>
+<p>and kick this pig!</p>
+<pre><code class="language-js">// for simplicity's sake, I'm going to make the canvas context global
+var ctx = createCanvas(width, height, `#canvas-container`)
+$frameCount = document.querySelector('#frame-counter')
+
+loop()
+</code></pre>
+<script>
+// for simplicity's sake, I'm going to make the canvas context global
+var ctx = createCanvas(width, height, `#canvas-container`)
+$frameCount = document.querySelector('#frame-counter')
+
+loop()
+</script>

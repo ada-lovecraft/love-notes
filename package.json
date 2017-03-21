@@ -8,7 +8,8 @@
     "start": "npm run watch",
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "examples:tangler": "node examples/tangler.js",
+    "examples:tangler": "DEBUG=*:log node examples/tangler.js",
+    "examples:weaver": "DEBUG=*:log node examples/weaver.js",
     "test": "ava -t ./test/*.spec.js",
     "test:watch": "DEBUG=*.spec:log ava -w ./test/*.spec.js",
     "prepublish": "npm test"
@@ -49,8 +50,11 @@
     "remark-html": "^6.0.0",
     "remark-parse": "^3.0.0",
     "unified": "^6.1.1",
+    "unist-builder": "^1.0.2",
+    "unist-util-parents": "^0.1.2",
     "unist-util-select": "^1.5.0",
-    "unist-util-visit": "^1.1.1"
+    "unist-util-visit": "^1.1.1",
+    "vfile-reporter": "^3.0.0"
   },
   "babel": {
     "presets": [
