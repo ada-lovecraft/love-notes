@@ -71,9 +71,9 @@ This example reads the `test.md` file found in the `test` directory and creates 
 
 
 ## TODO
-[x] Create Tangler
-[] Create Weaver
-[x] Create a proper README
-[x] Create a simple tangler example
-[] Create a simple weaver example
-[] Create an example project that tangles, weaves, and transpiles/includes other build technologies
+- [x] Create Tangler
+- [ ] Create Weaver
+- [x] Create a proper README
+- [x] Create a simple tangler example
+- [ ] Create a simple weaver example
+- [ ] Create an example project that tangles, weaves, and transpiles/includes other build technologies
