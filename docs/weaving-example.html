@@ -189,11 +189,9 @@ console.log('Hello, Weaver!')
     ctx.fillStyle = `rgb(${mod},${abs(128 - mod)},${255-mod})`
     ctx.strokeStyle = sign(sin(step)) >= 1 ? 'white' : 'black'
     push()
-    for(let i = 0; i &#x3C; numCircles; i++) {
+    for(let i = 0; i < numCircles; i++) {
       circle(poc(), radius)
     }
-
-    circle(poc(), radius)
     pop()
   }
 </script>
