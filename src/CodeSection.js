@@ -1,5 +1,5 @@
-const debug = require('debug')
-const {unless} = require('./utils')
+import debug from 'debug'
+import {unless} from './utils'
 const log = debug('CodeSection:log')
 
 
@@ -27,8 +27,7 @@ class CodeSection {
         this._children = block.data.childSections
       }
     }
-
   }
 }
 
-module.exports = CodeSection
+export default CodeSection

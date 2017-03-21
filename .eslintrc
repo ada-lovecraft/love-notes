@@ -1,0 +1,14 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:ava/recommended"
+  ],
+  "env": {
+    "node": true,
+    "mocha": true
+  },
+  "plugins": [
+    "ava"
+  ],
+}

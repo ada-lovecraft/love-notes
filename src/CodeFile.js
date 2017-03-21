@@ -1,6 +1,6 @@
-const debug = require('debug')
-const {unless, truncValues} = require('./utils')
-const CodeSection = require('./CodeSection')
+import debug from 'debug'
+import {unless, truncValues} from './utils'
+import CodeSection from './CodeSection'
 
 const log = debug('CodeFile:log')
 
@@ -57,4 +57,4 @@ class CodeFile {
   }
 }
 
-module.exports = CodeFile
+export default CodeFile

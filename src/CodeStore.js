@@ -1,7 +1,7 @@
-const debug = require('debug')
-const CodeFile = require('./CodeFile')
-const {unless} = require('./utils')
-const fmt = require('fmt-obj')
+import debug from 'debug'
+import CodeFile from './CodeFile'
+import {unless} from './utils'
+import fmt from 'fmt-obj'
 const log = debug('CodeStore:log')
 
 
@@ -138,4 +138,4 @@ class CodeStore {
 
 }
 
-module.exports = CodeStore
+export default CodeStore

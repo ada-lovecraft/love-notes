@@ -1,5 +1,5 @@
-const visit = require('unist-util-visit')
-const debug = require('debug')
+import visit from 'unist-util-visit'
+import debug from 'debug'
 
 const log = debug('remark-lovenotes:log')
 

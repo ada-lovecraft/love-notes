@@ -1,12 +1,10 @@
-require('babel-polyfill')
-const unified = require('unified')
-const remark = require('remark')
-const visit = require('unist-util-visit')
-const jetpack = require('fs-jetpack')
-const debug = require('debug')
-const fmt = require('fmt-obj')
-const {truncValues} = require('./utils')
-const CodeStore = require('./CodeStore')
+import remark from 'remark'
+import visit from 'unist-util-visit'
+import jetpack from 'fs-jetpack'
+import debug from 'debug'
+import fmt from 'fmt-obj'
+import {truncValues} from './utils'
+import CodeStore from './CodeStore'
 
 const fs = jetpack
 
@@ -41,4 +39,4 @@ function tangle(fptr, outdir = './docs') {
   log('files created:\n%O', pen.list().map(f => `${pen.cwd()}/${f}`))
 }
 
-module.exports = { tangle }
+export default { tangle }
