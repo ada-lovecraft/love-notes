@@ -10,6 +10,7 @@
     "watch": "rollup -c -w",
     "examples:tangler": "DEBUG=*:log node examples/tangler.js",
     "examples:weaver": "DEBUG=*:log node examples/weaver.js",
+    "examples:readme": "DEBUG=*:log node --inspect --debug-brk examples/readme-example.js ",
     "test": "ava -t ./test/*.spec.js",
     "test:watch": "DEBUG=*.spec:log ava -w ./test/*.spec.js",
     "prepublish": "npm test"

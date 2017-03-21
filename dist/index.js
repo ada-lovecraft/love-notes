@@ -1,13 +1,12 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('remark'), require('remark-html'), require('unist-util-visit'), require('unist-util-parents'), require('unist-builder'), require('fs-jetpack'), require('debug'), require('fmt-obj'), require('vfile-reporter')) :
-	typeof define === 'function' && define.amd ? define(['remark', 'remark-html', 'unist-util-visit', 'unist-util-parents', 'unist-builder', 'fs-jetpack', 'debug', 'fmt-obj', 'vfile-reporter'], factory) :
-	(global['love-notes-tangle'] = factory(global.remark,global.html,global.visit,global.unistUtilParents,global.u,global.jetpack,global.debug,global.fmtObj,global.vfileReporter));
-}(this, (function (remark,html,visit,unistUtilParents,u,jetpack,debug,fmtObj,vfileReporter) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('remark'), require('remark-html'), require('unist-util-visit'), require('unist-builder'), require('fs-jetpack'), require('debug'), require('fmt-obj'), require('vfile-reporter')) :
+	typeof define === 'function' && define.amd ? define(['remark', 'remark-html', 'unist-util-visit', 'unist-builder', 'fs-jetpack', 'debug', 'fmt-obj', 'vfile-reporter'], factory) :
+	(global['love-notes-tangle'] = factory(global.remark,global.html,global.visit,global.u,global.jetpack,global.debug,global.fmtObj,global.vfileReporter));
+}(this, (function (remark,html,visit,u,jetpack,debug,fmtObj,vfileReporter) { 'use strict';
 
 remark = 'default' in remark ? remark['default'] : remark;
 html = 'default' in html ? html['default'] : html;
 visit = 'default' in visit ? visit['default'] : visit;
-unistUtilParents = 'default' in unistUtilParents ? unistUtilParents['default'] : unistUtilParents;
 u = 'default' in u ? u['default'] : u;
 jetpack = 'default' in jetpack ? jetpack['default'] : jetpack;
 debug = 'default' in debug ? debug['default'] : debug;
@@ -293,6 +292,7 @@ var CodeStore = function () {
       file.addBlockToCodeSection(node, section);
       log$1('added node to file:', file.name);
       log$1('filenames:', this.filenames);
+      return node;
     }
   }, {
     key: 'listChildSectionNamesForNode',
@@ -338,7 +338,7 @@ var CodeStore = function () {
       }
 
       var s = lang.split('>');
-      if (!s.length) {
+      if (s.length < 2) {
         return ret;
       }
 
@@ -397,7 +397,8 @@ function process(fptr) {
   visit(ast, 'code', function (node) {
     node.data = node.data || {};
     if (none(node.data.process) || !!node.data.process) {
-      store.addNode(node);
+      // that's some bad ~hat~ side-effect, harry :\
+      node = store.addNode(node);
     }
   });
   log('virtual files created:', store.codefiles.length);
@@ -427,10 +428,11 @@ function tangle(fptr) {
 
 function weave(fptr) {
   var outdir = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : './docs';
+  var optr = arguments[2];
 
 
   var contents = fs.read(fptr);
-  var filename = /\/?(\S+)\.\S+$/.exec(fptr)[1] + '.html';
+  var filename = optr || /\/?(\S+)\.\S+$/.exec(fptr)[1] + '.html';
   remark().use(weaver).use(html).process(contents, function (err, file) {
     var pen = fs.cwd(outdir);
     pen.write(filename, file.contents);

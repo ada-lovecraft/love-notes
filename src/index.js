@@ -1,7 +1,6 @@
 import remark from 'remark'
 import html from 'remark-html'
 import visit from 'unist-util-visit'
-import parents from 'unist-util-parents'
 import u from 'unist-builder'
 import jetpack from 'fs-jetpack'
 import debug from 'debug'
@@ -28,7 +27,8 @@ function process(fptr) {
   visit(ast, 'code', node => {
     node.data = node.data || {}
     if(none(node.data.process) || !!node.data.process) {
-      store.addNode(node)
+      // that's some bad ~hat~ side-effect, harry :\
+      node = store.addNode(node)
     }
   })
   log('virtual files created:', store.codefiles.length)
@@ -52,10 +52,10 @@ function tangle(fptr, outdir = './docs') {
   log('files created:\n%O', pen.list().map(f => `${pen.cwd()}/${f}`))
 }
 
-function weave(fptr, outdir = `./docs`) {
+function weave(fptr, outdir = `./docs`, optr) {
 
   const contents = fs.read(fptr)
-  const filename = /\/?(\S+)\.\S+$/.exec(fptr)[1] + '.html'
+  const filename = optr || /\/?(\S+)\.\S+$/.exec(fptr)[1] + '.html'
   remark().use(weaver).use(html).process(contents, function (err, file) {
     const pen = fs.cwd(outdir)
     pen.write(filename, file.contents)

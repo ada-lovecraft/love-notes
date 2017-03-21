@@ -1,7 +1,6 @@
 import remark from 'remark';
 import html from 'remark-html';
 import visit from 'unist-util-visit';
-import unistUtilParents from 'unist-util-parents';
 import u from 'unist-builder';
 import jetpack from 'fs-jetpack';
 import debug from 'debug';
@@ -287,6 +286,7 @@ var CodeStore = function () {
       file.addBlockToCodeSection(node, section);
       log$1('added node to file:', file.name);
       log$1('filenames:', this.filenames);
+      return node;
     }
   }, {
     key: 'listChildSectionNamesForNode',
@@ -332,7 +332,7 @@ var CodeStore = function () {
       }
 
       var s = lang.split('>');
-      if (!s.length) {
+      if (s.length < 2) {
         return ret;
       }
 
@@ -391,7 +391,8 @@ function process(fptr) {
   visit(ast, 'code', function (node) {
     node.data = node.data || {};
     if (none(node.data.process) || !!node.data.process) {
-      store.addNode(node);
+      // that's some bad ~hat~ side-effect, harry :\
+      node = store.addNode(node);
     }
   });
   log('virtual files created:', store.codefiles.length);
@@ -421,10 +422,11 @@ function tangle(fptr) {
 
 function weave(fptr) {
   var outdir = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : './docs';
+  var optr = arguments[2];
 
 
   var contents = fs.read(fptr);
-  var filename = /\/?(\S+)\.\S+$/.exec(fptr)[1] + '.html';
+  var filename = optr || /\/?(\S+)\.\S+$/.exec(fptr)[1] + '.html';
   remark().use(weaver).use(html).process(contents, function (err, file) {
     var pen = fs.cwd(outdir);
     pen.write(filename, file.contents);

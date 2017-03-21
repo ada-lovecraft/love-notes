@@ -62,6 +62,7 @@ class CodeStore {
     file.addBlockToCodeSection(node, section)
     log('added node to file:', file.name)
     log('filenames:', this.filenames)
+    return node
   }
 
   listChildSectionNamesForNode(node) {
@@ -101,7 +102,7 @@ class CodeStore {
     }
 
     const s = lang.split('>')
-    if(!s.length) {
+    if(s.length < 2) {
       return ret
     }
 

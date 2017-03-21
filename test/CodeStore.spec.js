@@ -63,6 +63,10 @@ test('CodeStore#parseLang', t => {
   t.is(filename, 'index.js')
   t.is(section, 'root')
 
+  var {filename, section} = store.parseLang('js')
+  t.is(filename, 'index.js')
+  t.is(section, 'root')
+
   var {filename, section} = store.parseLang('js > index.js')
   t.is(filename, 'index.js')
   t.is(section, 'root')
