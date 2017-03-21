@@ -169,6 +169,35 @@ console.log('Hello, Weaver!')
     pop()
   }
 </code></pre>
+<script>
+  function draw() {
+    // ctx.clearRect(0, 0, width, height)
+
+    const step = frameCount * 0.0075
+    // dripping effect
+    push()
+    ctx.scale(1.0, 1.05)
+    ctx.drawImage(ctx.canvas, 0, 0)
+    pop()
+
+    // random number of circles
+    const numCircles = randomInRange(5, 10)
+    const radius = randomInRange(10, 50)
+
+    // BITWISE DOUBLE NOT operator
+    const mod = ~~abs(sin(frameCount * 0.0075) * 255)
+    ctx.fillStyle = `rgb(${mod},${abs(128 - mod)},${255-mod})`
+    ctx.strokeStyle = sign(sin(step)) >= 1 ? 'white' : 'black'
+    push()
+    for(let i = 0; i &#x3C; numCircles; i++) {
+      circle(poc(), radius)
+    }
+
+    circle(poc(), radius)
+    pop()
+  }
+</script>
+
 <p>Because I'm using <code>frameCount</code>, I'm going to create a small function that updates the count and also updates a small node on the DOM to show the number</p>
 <pre><code class="language-js">function updateFrameCount() {
   frameCount++
