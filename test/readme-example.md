@@ -21,13 +21,11 @@ function sum(a, b) {
 ```
 Oh, we're gonna need an exports section!
 ```js > math.js
-// section: #exports
 #exports
 ```
 
 Whoops. I forgot to add these methods earlier.
 ```js > math.js#other-methods
-// section: #other-methods
 #product
 #square
 #cube
@@ -46,18 +44,19 @@ Use `product` to create a `square` function
 ```js > math.js#product
 function square(a) {
   return product(a, a)
- }
+}
 ```
 
 Compose `square` and `product` to create a `cube` function
 ```js > math.js#cube
 function cube(a) {
   return product(a, square(a))
- }
+}
 ```
 
 Don't forget to export your functions!
 ```js > math.js#exports
+
 export default = {sum, product, square, cube}
 ```
 

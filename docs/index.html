@@ -13,12 +13,10 @@
 }
 </code></pre>
 <p>Oh, we're gonna need an exports section!</p>
-<pre><code class="language-js">// section: #exports
-#exports
+<pre><code class="language-js">#exports
 </code></pre>
 <p>Whoops. I forgot to add these methods earlier.</p>
-<pre><code class="language-js">// section: #other-methods
-#product
+<pre><code class="language-js">#product
 #square
 #cube
 </code></pre>
@@ -31,12 +29,12 @@
 <p>Use <code>product</code> to create a <code>square</code> function</p>
 <pre><code class="language-js">function square(a) {
   return product(a, a)
- }
+}
 </code></pre>
 <p>Compose <code>square</code> and <code>product</code> to create a <code>cube</code> function</p>
 <pre><code class="language-js">function cube(a) {
   return product(a, square(a))
- }
+}
 </code></pre>
 <p>Don't forget to export your functions!</p>
 <pre><code class="language-js">export default = {sum, product, square, cube}
