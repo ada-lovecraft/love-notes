@@ -164,9 +164,11 @@ Most editors also already have the ability to highlight not only the markdown it
 
 
 ## TODO
+- [ ] Add macros for inline-tangling
+- [ ] Create an example project that tangles, weaves, and transpiles/includes other build technologies
 - [x] Create Tangler
-- [ ] Create Weaver
+- [x] Create Weaver
 - [x] Create a proper README
 - [x] Create a simple tangler example
-- [ ] Create a simple weaver example
-- [ ] Create an example project that tangles, weaves, and transpiles/includes other build technologies
+- [x] Create a simple weaver example
+
