@@ -35,6 +35,15 @@ function process(fptr) {
   return store
 }
 
+function create(files, outdir) {
+  log('files:\n%O', files)
+  const pen = fs.cwd(outdir)
+  files.forEach(file => {
+    pen.write(file.name, file.source)
+  })
+  log('files created:\n%O', pen.list().map(f => `${pen.cwd()}/${f}`))
+}
+
 function tangle(fptr, outdir = './docs') {
   log('outdir:', outdir)
   const store = process(fptr)
@@ -44,12 +53,8 @@ function tangle(fptr, outdir = './docs') {
   const files = filenames.map(file => {
     return {source: store.generateSource(file), name: file}
   })
-  log('files:\n%O', files)
-  const pen = fs.cwd(outdir)
-  files.forEach(file => {
-    pen.write(file.name, file.source)
-  })
-  log('files created:\n%O', pen.list().map(f => `${pen.cwd()}/${f}`))
+  create(files, outdir)
+  return files
 }
 
 function weave(fptr, outdir = `./docs`, optr) {
@@ -92,4 +97,4 @@ function weaver() {
   return transformer
 }
 
-export default { tangle, process, weave }
+export default { tangle, process, weave, create }

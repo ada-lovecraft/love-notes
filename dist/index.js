@@ -405,6 +405,17 @@ function process(fptr) {
   return store;
 }
 
+function create(files, outdir) {
+  log('files:\n%O', files);
+  var pen = fs.cwd(outdir);
+  files.forEach(function (file) {
+    pen.write(file.name, file.source);
+  });
+  log('files created:\n%O', pen.list().map(function (f) {
+    return pen.cwd() + '/' + f;
+  }));
+}
+
 function tangle(fptr) {
   var outdir = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : './docs';
 
@@ -416,14 +427,8 @@ function tangle(fptr) {
   var files = filenames.map(function (file) {
     return { source: store.generateSource(file), name: file };
   });
-  log('files:\n%O', files);
-  var pen = fs.cwd(outdir);
-  files.forEach(function (file) {
-    pen.write(file.name, file.source);
-  });
-  log('files created:\n%O', pen.list().map(function (f) {
-    return pen.cwd() + '/' + f;
-  }));
+  create(files, outdir);
+  return files;
 }
 
 function weave(fptr) {
@@ -470,7 +475,7 @@ function weaver() {
   return transformer;
 }
 
-var index = { tangle: tangle, process: process, weave: weave };
+var index = { tangle: tangle, process: process, weave: weave, create: create };
 
 return index;
 
