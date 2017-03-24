@@ -1,6 +1,6 @@
 {
   "name": "love-notes",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A literate programming tangler and weaver",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.mjs",
